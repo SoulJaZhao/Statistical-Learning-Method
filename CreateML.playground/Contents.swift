@@ -4,17 +4,16 @@ import Foundation
 
 let csvFile = Bundle.main.url(forResource: "iris", withExtension: "csv")!
 var dataTable = try MLDataTable.init(contentsOf: csvFile)
-dataTable.removeColumn(named: "id")
+print(dataTable)
 
 let classifierColumns = ["sepal length", "sepal width", "label"]
 let classifierTable = dataTable[classifierColumns]
 
-let (classifierEvaluationTable, classifierTrainingTable) = classifierTable.randomSplit(by: 0.20, seed: 42)
+let (classifierTrainingTable,classifierEvaluationTable) = classifierTable.randomSplit(by: 0.8, seed: 5)
 
 print(classifierTrainingTable)
 
-let classifier = try MLClassifier(trainingData: classifierTrainingTable,
-                                  targetColumn: "label")
+let classifier = try MLSupportVectorClassifier(trainingData: classifierTrainingTable, targetColumn: "label")
 /// Classifier training accuracy as a percentage
 let trainingError = classifier.trainingMetrics.classificationError
 let trainingAccuracy = (1.0 - trainingError) * 100

@@ -9,15 +9,33 @@ import SwiftUI
 import Combine
 
 struct ContentView: View {
-    let pred = Predict()
-    @State private var result: Int = -1
+    @ObservedObject var iris = Iris()
+    @State private var sepal_length: Double = 0.0
+    @State private var sepal_width: Double = 0.0
     
     var body: some View {
         VStack {
-            Text("\(result)")
+            HStack {
+                Text("Sepal Length:")
+                Spacer()
+                TextField("Sepal Length", value: $sepal_length, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("Sepal Width:")
+                Spacer()
+                TextField("Sepal Width", value: $sepal_width, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.decimalPad)
+            }
+            
+            Text("\(iris.typeName)")
                 .padding()
+            
             Button("Predict") {
-                result = pred.predict()
+                iris.predict(sepal_length: sepal_length, sepal_width: sepal_width)
             }
         }
     }
